@@ -30,14 +30,12 @@
     "typescript": "^5"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "next lint --fix --debug"
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
     ],
-    "**/*": "prettier --write --ignore-unknown"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
+    "*.{json,md,css}": [
+      "prettier --write"
+    ]
   }
 }
