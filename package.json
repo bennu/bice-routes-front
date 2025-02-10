@@ -30,6 +30,9 @@
     "typescript": "^5"
   },
   "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "next lint --fix --debug"
+    ],
     "**/*": "prettier --write --ignore-unknown"
   },
   "husky": {
