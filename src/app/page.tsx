@@ -1,58 +1,57 @@
-import styles from './page.module.css'
+'use client'
 
-export default function Home() {
+import { Box, ThemeProvider } from '@mui/material'
+import { useCallback } from 'react'
+
+// Tema
+import theme from './theme/theme'
+
+// Componentes de layout
+import Header from '@/app/components/layout/header'
+import Footer from '@/app/components/layout/footer'
+
+// Secciones de la página
+import HeroSection from '@/app/components/sections/hero-section'
+import FeaturesSection from '@/app/components/sections/feature-section'
+import ApiImprovementSection from '@/app/components/sections/api-improvement-section'
+import FileConverterSection from '@/app/components/sections/file-convertion'
+import FaqSection from '@/app/components/sections/faq-section'
+
+export default function BiceRoutes() {
+  // Función para scroll a la sección de conversión
+  const scrollToConversion = useCallback(() => {
+    const section = document.getElementById('conversion')
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [])
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <ThemeProvider theme={theme}>
+      <Box
+        sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}
+      >
+        {/* Header */}
+        <Header />
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        {/* Hero Section */}
+        <HeroSection onActionClick={scrollToConversion} />
+
+        {/* Features Section */}
+        <FeaturesSection />
+
+        {/* API Improvement Section */}
+        <ApiImprovementSection />
+
+        {/* File Converter Section */}
+        <FileConverterSection />
+
+        {/* FAQ Section */}
+        <FaqSection />
+
+        {/* Footer */}
+        <Footer />
+      </Box>
+    </ThemeProvider>
   )
 }
