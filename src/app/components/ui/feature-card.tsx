@@ -40,8 +40,7 @@ const FeatureCard = ({
         <Box
           sx={{
             width: '100%',
-            height: '100%',
-            background: `url("/api/placeholder/400/200") center/cover`
+            height: '100%'
           }}
         />
         <Box
@@ -62,10 +61,10 @@ const FeatureCard = ({
         </Box>
       </Box>
       <CardContent sx={{ p: 3 }}>
-        <Typography variant="h5" component="h3" gutterBottom>
+        <Typography variant="h5" component="h3" gutterBottom align="justify">
           {title}
         </Typography>
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant="body2" color="textSecondary" align="justify">
           {description}
         </Typography>
       </CardContent>

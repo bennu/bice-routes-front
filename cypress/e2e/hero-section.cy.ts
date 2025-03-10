@@ -27,10 +27,6 @@ describe('HeroSection Component', () => {
     cy.contains('h2', 'Convertidor de YML a Rutas').should('be.visible')
 
     // Verifica que se ha hecho scroll hasta la sección del convertidor
-    cy.get('#conversion').then(() => {
-      // Verifica que el elemento está visible en la ventana
-      // Si el elemento está completamente o parcialmente visible, su parte superior
-      // debería estar dentro de la ventana o justo encima de ella
-    })
+    cy.get('#conversion').then(() => {})
   })
 })

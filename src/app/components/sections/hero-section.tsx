@@ -36,17 +36,18 @@ const HeroSection = ({ onActionClick }: HeroSectionProps) => {
                 mb: 3
               }}
             >
-              Convierte YML a rutas API instantáneamente
+              Convierte OPENAPI.SPEC a rutas API instantáneamente
             </Typography>
 
             <Typography
               variant="h6"
               color="textSecondary"
               sx={{ mb: 4, fontWeight: 400 }}
+              align="justify"
             >
-              BICE Routes convierte tus archivos YML en rutas API utilizables
-              con un solo clic. Ahorra tiempo y evita errores en el desarrollo
-              de tus proyectos.
+              BICE Routes convierte tus archivos OPENAPI.SPEC en rutas API
+              utilizables con un solo clic. Ahorra tiempo y evita errores en el
+              desarrollo de tus proyectos.
             </Typography>
 
             <Button

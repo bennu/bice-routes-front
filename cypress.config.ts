@@ -7,7 +7,6 @@ export default defineConfig({
     viewportWidth: 1280,
     viewportHeight: 720,
     video: false, // Cambiar a true si quieres grabar videos de las pruebas
-    screenshotOnRunFailure: true,
-    supportFile: 'cypress/support/e2e.js' // Para comandos personalizados
+    screenshotOnRunFailure: true
   }
 })

@@ -42,11 +42,20 @@ const Footer = () => {
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <Logo size="small" />
             </Box>
-            <Typography variant="body2" color="textSecondary" paragraph>
+            <Typography variant="body2" color="textSecondary" align="justify">
               Herramienta simple y eficiente para convertir archivos YML a rutas
               API. Optimiza tu flujo de trabajo de desarrollo.
             </Typography>
-            <Typography variant="body2" color="textSecondary" fontWeight="bold">
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              fontWeight="bold"
+              component="a"
+              href="https://bennu.cl"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ textDecoration: 'none' }}
+            >
               powered by bennu
             </Typography>
           </Box>
@@ -61,29 +70,10 @@ const Footer = () => {
           />
 
           <FooterLinkSection
-            title="Recursos"
-            links={[
-              { title: 'Documentación', href: '#docs' },
-              { title: 'Blog', href: '#blog' },
-              { title: 'Soporte', href: '#support' }
-            ]}
-          />
-
-          <FooterLinkSection
             title="Empresa"
             links={[
-              { title: 'Acerca de', href: '#about' },
-              { title: 'Contacto', href: '#contact' },
-              { title: 'Privacidad', href: '#privacy' }
-            ]}
-          />
-
-          <FooterLinkSection
-            title="Legal"
-            links={[
-              { title: 'Términos', href: '#terms' },
-              { title: 'Privacidad', href: '#privacy-policy' },
-              { title: 'Cookies', href: '#cookies' }
+              { title: 'Acerca de', href: 'https://bennu.cl' },
+              { title: 'Contacto', href: '#contact' }
             ]}
           />
         </Box>

@@ -183,7 +183,7 @@ const FileConversionAnimation = () => {
               </Box>
             </Box>
             <Typography variant="caption" sx={{ mt: 1, color: '#666' }}>
-              archivo.yml
+              openapi.spec
             </Typography>
           </Box>
 
@@ -442,14 +442,7 @@ const FileConversionAnimation = () => {
             transform: isHovering ? 'translateY(0)' : 'translateY(10px)',
             opacity: isHovering ? 1 : 0
           }}
-        >
-          <Typography
-            variant="body2"
-            sx={{ color: colors.bleuDeFrance, fontWeight: 500 }}
-          >
-            Convirtiendo YML a rutas API
-          </Typography>
-        </Box>
+        ></Box>
       </Box>
 
       {/* CSS global para animaciones */}

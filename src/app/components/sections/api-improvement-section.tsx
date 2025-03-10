@@ -1,7 +1,8 @@
-// Sección "Mejora tus APIs"
+'use client'
 
-import { Box, Container, Typography, Button, Stack, alpha } from '@mui/material'
-import { colors } from '../../theme/theme'
+import { Box, Container, Typography, alpha } from '@mui/material'
+import { colors } from '@/app/theme/theme'
+import YamlTypingAnimation from '@/app/components/ui/yaml-typing-animation '
 
 const ApiImprovementSection = () => {
   return (
@@ -25,7 +26,7 @@ const ApiImprovementSection = () => {
               Mejora tus APIs
             </Typography>
 
-            <Typography variant="body1" paragraph sx={{ mb: 3 }}>
+            <Typography variant="body1" align="justify" sx={{ mb: 3 }}>
               Antes de implementar, aprovecha nuestras otras herramientas para
               modificar aún más tus rutas API. Puedes agregar autenticación,
               validación y documentación, comprimirlas para enviarlas por correo
@@ -33,56 +34,29 @@ const ApiImprovementSection = () => {
               gestión de archivos.
             </Typography>
 
-            <Typography variant="body1" paragraph>
+            <Typography variant="body1" align="justify">
               Nuestro motor de conversión inteligente asegura que todas las
               especificaciones de tu YML sean preservadas con exactitud,
               garantizando una traducción perfecta a rutas API funcionales.
             </Typography>
-
-            <Stack
-              direction={{ xs: 'column', sm: 'row' }}
-              spacing={2}
-              sx={{ mt: 4 }}
-            >
-              <Button
-                variant="contained"
-                sx={{
-                  bgcolor: colors.bleuDeFrance,
-                  color: 'white',
-                  px: 3,
-                  py: 1.5
-                }}
-              >
-                Explorar herramientas
-              </Button>
-              <Button
-                variant="outlined"
-                sx={{
-                  borderColor: colors.bleuDeFrance,
-                  color: colors.bleuDeFrance,
-                  px: 3,
-                  py: 1.5
-                }}
-              >
-                Ver ejemplos
-              </Button>
-            </Stack>
           </Box>
 
           <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 50%' } }}>
             <Box sx={{ position: 'relative' }}>
+              {/* Reemplazar imagen estática con animación de tipeo YAML */}
               <Box
                 sx={{
                   width: '100%',
                   height: 400,
                   borderRadius: 4,
                   overflow: 'hidden',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
-                  background: `url("/api/placeholder/600/400") center/cover`
+                  position: 'relative'
                 }}
-              />
+              >
+                <YamlTypingAnimation />
+              </Box>
 
-              {/* Decorative elements */}
+              {/* Elementos decorativos */}
               <Box
                 sx={{
                   position: 'absolute',
@@ -91,7 +65,7 @@ const ApiImprovementSection = () => {
                   width: 80,
                   height: 80,
                   borderRadius: '50%',
-                  bgcolor: colors.bleuDeFrance,
+                  bgcolor: alpha(colors.bleuDeFrance, 0.1),
                   zIndex: -1
                 }}
               />
