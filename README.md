@@ -11,6 +11,7 @@ A modern Next.js routing application with React 19 and Material UI.
 [![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?logo=prettier)](https://prettier.io/)
 [![Commitlint](https://img.shields.io/badge/commitlint-enabled-brightgreen?logo=commitlint)](https://commitlint.js.org/)
 [![Husky](https://img.shields.io/badge/husky-enabled-yellow?logo=git)](https://typicode.github.io/husky/)
+[![License](https://img.shields.io/github/license/bennu/commons?label=License&logo=opensourceinitiative)](https://opensource.org/license/mit-0)
 
 ## 📋 Features
 
