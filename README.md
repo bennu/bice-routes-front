@@ -73,4 +73,4 @@ Pre-commit hooks will automatically:
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](./licence) file for details.
+This project is licensed under the MIT License - see the [LICENSE](./license) file for details.
