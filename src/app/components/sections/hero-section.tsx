@@ -36,7 +36,7 @@ const HeroSection = ({ onActionClick }: HeroSectionProps) => {
                 mb: 3
               }}
             >
-              Convierte OPENAPI.SPEC a rutas API instantáneamente
+              Convierte openAPI.spec a rutas API instantáneamente
             </Typography>
 
             <Typography
@@ -45,7 +45,7 @@ const HeroSection = ({ onActionClick }: HeroSectionProps) => {
               sx={{ mb: 4, fontWeight: 400 }}
               align="justify"
             >
-              BICE Routes convierte tus archivos OPENAPI.SPEC en rutas API
+              BICE Routes convierte tus archivos openAPI.spec en rutas API
               utilizables con un solo clic. Ahorra tiempo y evita errores en el
               desarrollo de tus proyectos.
             </Typography>

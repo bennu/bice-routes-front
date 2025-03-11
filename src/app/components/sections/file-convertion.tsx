@@ -17,18 +17,49 @@ import {
   Tooltip,
   alpha,
   CircularProgress,
-  TextField
+  TextField,
+  Tabs,
+  Tab
 } from '@mui/material'
 import { colors } from '../../theme/theme'
 import { parse } from '@/app/service/routesService'
+import DownloadIcon from '@mui/icons-material/Download'
+
+interface TabPanelProps {
+  children?: React.ReactNode
+  index: number
+  value: number
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`routes-tabpanel-${index}`}
+      aria-labelledby={`routes-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ pt: 2 }}>{children}</Box>}
+    </div>
+  )
+}
 
 const FileConverterSection = () => {
   const [files, setFiles] = useState<File[]>([])
   const [routes, setRoutes] = useState<string[]>([])
+  const [routesFail, setRoutesFail] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [existingRoutes, setExistingRoutes] = useState<string>('')
+  const [tabValue, setTabValue] = useState<number>(0)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue)
+  }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -108,17 +139,29 @@ const FileConverterSection = () => {
       // Enviar los datos al servicio
       const response = await parse(data)
 
-      // Procesar la respuesta - corregido para manejar tanto un array directamente como un objeto con propiedad routes
-      if (Array.isArray(response)) {
+      // Procesar la respuesta - actualizado para manejar el formato que incluye newRoutes y routesFail
+      if (response && Array.isArray(response.newRoutes)) {
+        // El backend devuelve un objeto con propiedad newRoutes
+        setRoutes(response.newRoutes)
+        // Guardar también las rutas fallidas si existen
+        if (Array.isArray(response.routesFail)) {
+          setRoutesFail(response.routesFail)
+        } else {
+          setRoutesFail([])
+        }
+      } else if (Array.isArray(response)) {
         // El backend devuelve un array directamente
         setRoutes(response)
+        setRoutesFail([])
       } else if (response && Array.isArray(response.routes)) {
         // El backend devuelve un objeto con propiedad routes
         setRoutes(response.routes)
+        setRoutesFail([])
       } else {
         // Formato inesperado
         console.warn('Formato de respuesta inesperado:', response)
         setRoutes([])
+        setRoutesFail([])
       }
     } catch (error) {
       console.error('Error al generar rutas:', error)
@@ -421,8 +464,8 @@ DELETE /api/v1/users/{id}"
               </Typography>
             )}
 
-            {/* Routes Display */}
-            {routes.length > 0 && (
+            {/* Routes Display with Tabs */}
+            {(routes.length > 0 || routesFail.length > 0) && (
               <Paper
                 sx={{ p: 3, bgcolor: alpha(colors.littleBoyBlue, 0.2), mb: 4 }}
               >
@@ -431,51 +474,192 @@ DELETE /api/v1/users/{id}"
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    mb: 2
+                    mb: 1
                   }}
                 >
                   <Typography variant="subtitle1" fontWeight="medium">
-                    Rutas generadas
+                    Resultados
                   </Typography>
                   <Tooltip title="Descargar rutas">
-                    <IconButton onClick={downloadRoutes} color="primary">
-                      <Box sx={{ fontSize: 'default' }}>⬇️</Box>
+                    <IconButton
+                      onClick={downloadRoutes}
+                      color="primary"
+                      disabled={routes.length === 0}
+                    >
+                      <DownloadIcon />
                     </IconButton>
                   </Tooltip>
                 </Box>
-                <Divider sx={{ mb: 2 }} />
-                <Box
-                  sx={{
-                    bgcolor: 'background.paper',
-                    p: 2,
-                    borderRadius: 1,
-                    fontFamily: 'monospace',
-                    fontSize: '0.875rem',
-                    overflowX: 'auto'
-                  }}
-                >
-                  {routes.map((route, index) => (
-                    <Typography
-                      key={index}
-                      variant="body2"
-                      component="div"
+
+                {/* Tabs navigation */}
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                  <Tabs
+                    value={tabValue}
+                    onChange={handleTabChange}
+                    aria-label="rutas tabs"
+                    sx={{
+                      '& .MuiTab-root': {
+                        textTransform: 'none',
+                        minWidth: 'auto',
+                        fontWeight: 'medium',
+                        mr: 2
+                      }
+                    }}
+                  >
+                    <Tab
+                      label={
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Typography variant="body2">
+                            Rutas generadas
+                          </Typography>
+                          {routes.length > 0 && (
+                            <Box
+                              sx={{
+                                bgcolor: colors.bleuDeFrance,
+                                color: 'white',
+                                width: 20,
+                                height: 20,
+                                borderRadius: '50%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                ml: 1,
+                                fontSize: 12
+                              }}
+                            >
+                              {routes.length}
+                            </Box>
+                          )}
+                        </Box>
+                      }
+                      id="routes-tab-0"
+                      aria-controls="routes-tabpanel-0"
+                    />
+                    <Tab
+                      label={
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Typography
+                            variant="body2"
+                            color={
+                              routesFail.length > 0 ? 'error.main' : 'inherit'
+                            }
+                          >
+                            Rutas repetidas
+                          </Typography>
+                          {routesFail.length > 0 && (
+                            <Box
+                              sx={{
+                                bgcolor: 'error.main',
+                                color: 'white',
+                                width: 20,
+                                height: 20,
+                                borderRadius: '50%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                ml: 1,
+                                fontSize: 12
+                              }}
+                            >
+                              {routesFail.length}
+                            </Box>
+                          )}
+                        </Box>
+                      }
+                      id="routes-tab-1"
+                      aria-controls="routes-tabpanel-1"
+                    />
+                  </Tabs>
+                </Box>
+
+                {/* Tab content */}
+                <TabPanel value={tabValue} index={0}>
+                  {routes.length > 0 ? (
+                    <Box
                       sx={{
-                        mb: 0.5,
-                        color: route.startsWith('GET')
-                          ? 'success.main'
-                          : route.startsWith('POST')
-                            ? 'info.main'
-                            : route.startsWith('PUT')
-                              ? 'warning.main'
-                              : route.startsWith('DELETE')
-                                ? 'error.main'
-                                : 'text.primary'
+                        bgcolor: 'background.paper',
+                        p: 2,
+                        borderRadius: 1,
+                        fontFamily: 'monospace',
+                        fontSize: '0.875rem',
+                        overflowX: 'auto'
                       }}
                     >
-                      {route}
+                      {routes.map((route, index) => (
+                        <Typography
+                          key={index}
+                          variant="body2"
+                          component="div"
+                          sx={{
+                            mb: 0.5,
+                            color: route.startsWith('GET')
+                              ? 'success.main'
+                              : route.startsWith('POST')
+                                ? 'info.main'
+                                : route.startsWith('PUT')
+                                  ? 'warning.main'
+                                  : route.startsWith('DELETE')
+                                    ? 'error.main'
+                                    : 'text.primary'
+                          }}
+                        >
+                          {route}
+                        </Typography>
+                      ))}
+                    </Box>
+                  ) : (
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        textAlign: 'center',
+                        py: 4,
+                        color: 'text.secondary'
+                      }}
+                    >
+                      No hay rutas generadas
                     </Typography>
-                  ))}
-                </Box>
+                  )}
+                </TabPanel>
+
+                <TabPanel value={tabValue} index={1}>
+                  {routesFail.length > 0 ? (
+                    <Box
+                      sx={{
+                        bgcolor: 'background.paper',
+                        p: 2,
+                        borderRadius: 1,
+                        fontFamily: 'monospace',
+                        fontSize: '0.875rem',
+                        overflowX: 'auto'
+                      }}
+                    >
+                      {routesFail.map((route, index) => (
+                        <Typography
+                          key={index}
+                          variant="body2"
+                          component="div"
+                          sx={{
+                            mb: 0.5,
+                            color: 'error.main'
+                          }}
+                        >
+                          {route}
+                        </Typography>
+                      ))}
+                    </Box>
+                  ) : (
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        textAlign: 'center',
+                        py: 4,
+                        color: 'text.secondary'
+                      }}
+                    >
+                      No hay rutas fallidas
+                    </Typography>
+                  )}
+                </TabPanel>
               </Paper>
             )}
           </Box>

@@ -22,7 +22,7 @@ const Footer = () => {
       sx={{
         py: 4,
         px: 2,
-        bgcolor: 'white',
+        bgcolor: '#ffffff',
         borderTop: `1px solid ${alpha(colors.bleuDeFrance, 0.1)}`
       }}
     >
@@ -60,22 +60,84 @@ const Footer = () => {
             </Typography>
           </Box>
 
-          <FooterLinkSection
-            title="Producto"
-            links={[
-              { title: 'Características', href: '#features' },
-              { title: 'Ejemplos', href: '#examples' },
-              { title: 'Guías', href: '#guides' }
-            ]}
-          />
+          <Box>
+            <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+              Producto
+            </Typography>
+            <Stack spacing={1}>
+              <Link
+                component="button"
+                variant="body2"
+                underline="none"
+                color="textSecondary"
+                sx={{ textAlign: 'left' }}
+                onClick={() => {
+                  const element = document.querySelector('#features')
+                  if (element) element.scrollIntoView({ behavior: 'smooth' })
+                }}
+              >
+                Características
+              </Link>
+              <Link
+                component="button"
+                variant="body2"
+                underline="none"
+                color="textSecondary"
+                sx={{ textAlign: 'left' }}
+                onClick={() => {
+                  const element = document.querySelector('#examples')
+                  if (element) element.scrollIntoView({ behavior: 'smooth' })
+                }}
+              >
+                Ejemplos
+              </Link>
+              <Link
+                component="button"
+                variant="body2"
+                underline="none"
+                color="textSecondary"
+                sx={{ textAlign: 'left' }}
+                onClick={() => {
+                  const element = document.querySelector('#guides')
+                  if (element) element.scrollIntoView({ behavior: 'smooth' })
+                }}
+              >
+                Guías
+              </Link>
+            </Stack>
+          </Box>
 
-          <FooterLinkSection
-            title="Empresa"
-            links={[
-              { title: 'Acerca de', href: 'https://bennu.cl' },
-              { title: 'Contacto', href: '#contact' }
-            ]}
-          />
+          <Box>
+            <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+              Empresa
+            </Typography>
+            <Stack spacing={1}>
+              <Link
+                component="button"
+                variant="body2"
+                underline="none"
+                color="textSecondary"
+                sx={{ textAlign: 'left' }}
+                onClick={() => {
+                  window.open('https://bennu.cl', '_blank')
+                }}
+              >
+                Acerca de
+              </Link>
+              <Link
+                component="button"
+                variant="body2"
+                underline="none"
+                color="textSecondary"
+                sx={{ textAlign: 'left' }}
+                onClick={(e) => {
+                  e.preventDefault()
+                }}
+              >
+                Contacto
+              </Link>
+            </Stack>
+          </Box>
         </Box>
 
         <Divider sx={{ my: 4 }} />
@@ -84,42 +146,6 @@ const Footer = () => {
           © {year} BICE Routes. Todos los derechos reservados.
         </Typography>
       </Container>
-    </Box>
-  )
-}
-
-// Sub-componente para secciones de enlaces del footer
-interface FooterLink {
-  title: string
-  href: string
-}
-
-interface FooterLinkSectionProps {
-  title: string
-  links: FooterLink[]
-}
-
-const FooterLinkSection = ({ title, links }: FooterLinkSectionProps) => {
-  return (
-    <Box>
-      <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-        {title}
-      </Typography>
-      <Stack spacing={1}>
-        {links.map((link, index) => (
-          <Link
-            key={index}
-            component="button"
-            variant="body2"
-            underline="none"
-            color="textSecondary"
-            href={link.href}
-            sx={{ textAlign: 'left' }}
-          >
-            {link.title}
-          </Link>
-        ))}
-      </Stack>
     </Box>
   )
 }
