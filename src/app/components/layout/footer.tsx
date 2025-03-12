@@ -8,13 +8,16 @@ import {
   Link,
   Stack,
   Typography,
-  alpha
+  alpha,
+  useTheme
 } from '@mui/material'
 import Logo from './logo'
 import { colors } from '../../theme/theme'
 
 const Footer = () => {
   const year = new Date().getFullYear()
+  const theme = useTheme()
+  const isDark = theme.palette.mode === 'dark'
 
   return (
     <Box
@@ -22,8 +25,11 @@ const Footer = () => {
       sx={{
         py: 4,
         px: 2,
-        bgcolor: '#ffffff',
-        borderTop: `1px solid ${alpha(colors.bleuDeFrance, 0.1)}`
+        bgcolor: theme.palette.background.paper, // Adaptado al tema
+        borderTop: `1px solid ${alpha(
+          isDark ? theme.palette.primary.main : colors.bleuDeFrance,
+          isDark ? 0.2 : 0.1
+        )}`
       }}
     >
       <Container maxWidth="lg">
@@ -42,26 +48,38 @@ const Footer = () => {
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <Logo size="small" />
             </Box>
-            <Typography variant="body2" color="textSecondary" align="justify">
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              align="justify"
+              sx={{ color: theme.palette.text.secondary }}
+            >
               Herramienta simple y eficiente para convertir archivos YML a rutas
               API. Optimiza tu flujo de trabajo de desarrollo.
             </Typography>
             <Typography
               variant="body2"
-              color="textSecondary"
               fontWeight="bold"
               component="a"
               href="https://bennu.cl"
               target="_blank"
               rel="noopener noreferrer"
-              sx={{ textDecoration: 'none' }}
+              sx={{
+                textDecoration: 'none',
+                color: theme.palette.text.secondary
+              }}
             >
               powered by bennu
             </Typography>
           </Box>
 
           <Box>
-            <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+            <Typography
+              variant="subtitle2"
+              fontWeight="bold"
+              gutterBottom
+              sx={{ color: theme.palette.text.primary }}
+            >
               Producto
             </Typography>
             <Stack spacing={1}>
@@ -69,8 +87,10 @@ const Footer = () => {
                 component="button"
                 variant="body2"
                 underline="none"
-                color="textSecondary"
-                sx={{ textAlign: 'left' }}
+                sx={{
+                  textAlign: 'left',
+                  color: theme.palette.text.secondary
+                }}
                 onClick={() => {
                   const element = document.querySelector('#features')
                   if (element) element.scrollIntoView({ behavior: 'smooth' })
@@ -82,8 +102,10 @@ const Footer = () => {
                 component="button"
                 variant="body2"
                 underline="none"
-                color="textSecondary"
-                sx={{ textAlign: 'left' }}
+                sx={{
+                  textAlign: 'left',
+                  color: theme.palette.text.secondary
+                }}
                 onClick={() => {
                   const element = document.querySelector('#examples')
                   if (element) element.scrollIntoView({ behavior: 'smooth' })
@@ -95,8 +117,10 @@ const Footer = () => {
                 component="button"
                 variant="body2"
                 underline="none"
-                color="textSecondary"
-                sx={{ textAlign: 'left' }}
+                sx={{
+                  textAlign: 'left',
+                  color: theme.palette.text.secondary
+                }}
                 onClick={() => {
                   const element = document.querySelector('#guides')
                   if (element) element.scrollIntoView({ behavior: 'smooth' })
@@ -108,7 +132,12 @@ const Footer = () => {
           </Box>
 
           <Box>
-            <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+            <Typography
+              variant="subtitle2"
+              fontWeight="bold"
+              gutterBottom
+              sx={{ color: theme.palette.text.primary }}
+            >
               Empresa
             </Typography>
             <Stack spacing={1}>
@@ -116,8 +145,10 @@ const Footer = () => {
                 component="button"
                 variant="body2"
                 underline="none"
-                color="textSecondary"
-                sx={{ textAlign: 'left' }}
+                sx={{
+                  textAlign: 'left',
+                  color: theme.palette.text.secondary
+                }}
                 onClick={() => {
                   window.open('https://bennu.cl', '_blank')
                 }}
@@ -128,8 +159,10 @@ const Footer = () => {
                 component="button"
                 variant="body2"
                 underline="none"
-                color="textSecondary"
-                sx={{ textAlign: 'left' }}
+                sx={{
+                  textAlign: 'left',
+                  color: theme.palette.text.secondary
+                }}
                 onClick={(e) => {
                   e.preventDefault()
                 }}
@@ -140,9 +173,13 @@ const Footer = () => {
           </Box>
         </Box>
 
-        <Divider sx={{ my: 4 }} />
+        <Divider sx={{ my: 4, borderColor: theme.palette.divider }} />
 
-        <Typography variant="body2" color="textSecondary" align="center">
+        <Typography
+          variant="body2"
+          align="center"
+          sx={{ color: theme.palette.text.secondary }}
+        >
           © {year} BICE Routes. Todos los derechos reservados.
         </Typography>
       </Container>

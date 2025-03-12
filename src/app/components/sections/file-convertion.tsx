@@ -19,7 +19,8 @@ import {
   CircularProgress,
   TextField,
   Tabs,
-  Tab
+  Tab,
+  useTheme
 } from '@mui/material'
 import { colors } from '../../theme/theme'
 import { parse } from '@/app/service/routesService'
@@ -48,6 +49,9 @@ function TabPanel(props: TabPanelProps) {
 }
 
 const FileConverterSection = () => {
+  const theme = useTheme()
+  const isDark = theme.palette.mode === 'dark'
+
   const [files, setFiles] = useState<File[]>([])
   const [routes, setRoutes] = useState<string[]>([])
   const [routesFail, setRoutesFail] = useState<string[]>([])
@@ -121,19 +125,19 @@ const FileConverterSection = () => {
 
     try {
       // Convertir los archivos a base64
-      const base64List = await Promise.all(
+      const openApiSpecs = await Promise.all(
         files.map((file) => convertFileToBase64(file))
       )
 
       // Codificar las rutas existentes en base64 (si hay)
-      const existingRoutesBase64 = existingRoutes
+      const existingRoutesEncoded = existingRoutes
         ? btoa(existingRoutes)
         : btoa('') // Si no hay rutas existentes, enviamos un string vacío codificado
 
       // Crear el objeto de datos correctamente estructurado para el backend
       const data = {
-        routes: existingRoutesBase64,
-        openApiSpecs: base64List
+        routes: existingRoutesEncoded,
+        openApiSpecs: openApiSpecs
       }
 
       // Enviar los datos al servicio
@@ -167,6 +171,7 @@ const FileConverterSection = () => {
       console.error('Error al generar rutas:', error)
       setError('Error al procesar los archivos. Por favor, inténtalo de nuevo.')
       setRoutes([])
+      setRoutesFail([])
     } finally {
       setIsLoading(false)
     }
@@ -204,12 +209,28 @@ const FileConverterSection = () => {
       setError('No se pudo crear el archivo de descarga')
     }
   }
+
+  // Color para el botón de libertad adaptado al tema
+  const libertyColor = isDark ? theme.palette.primary.main : colors.liberty
+
+  // Color para botones y elementos de BleuDeFrance adaptado al tema
+  const bleuColor = isDark ? theme.palette.primary.main : colors.bleuDeFrance
+
+  // Color para el área de carga
+  const dropAreaBgColor = alpha(bleuColor, isDark ? 0.1 : 0.05)
+  const dropAreaBorderColor = isDark ? alpha(bleuColor, 0.5) : bleuColor
+
+  // Color para el área de resultados
+  const resultsAreaBgColor = isDark
+    ? alpha(theme.palette.background.paper, 0.3)
+    : alpha(colors.littleBoyBlue, 0.2)
+
   return (
     <Box
       id="conversion"
       sx={{
         py: { xs: 8, md: 10 },
-        bgcolor: 'white'
+        bgcolor: theme.palette.background.default // Usar color del tema
       }}
     >
       <Container maxWidth="lg">
@@ -218,7 +239,10 @@ const FileConverterSection = () => {
           component="h2"
           align="center"
           gutterBottom
-          sx={{ mb: 2 }}
+          sx={{
+            mb: 2,
+            color: theme.palette.text.primary // Adaptado al tema
+          }}
         >
           Convertidor de YML a Rutas
         </Typography>
@@ -241,8 +265,18 @@ const FileConverterSection = () => {
         >
           <Box sx={{ width: { xs: '100%', md: '80%', lg: '66.6%' } }}>
             {/* Existing Routes Input */}
-            <Paper sx={{ p: 3, mb: 3 }}>
-              <Typography variant="subtitle1" gutterBottom>
+            <Paper
+              sx={{
+                p: 3,
+                mb: 3,
+                bgcolor: theme.palette.background.paper // Adaptado al tema
+              }}
+            >
+              <Typography
+                variant="subtitle1"
+                gutterBottom
+                sx={{ color: theme.palette.text.primary }}
+              >
                 Rutas Existentes (Opcional)
               </Typography>
               <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
@@ -275,11 +309,11 @@ DELETE /api/v1/users/{id}"
                 alignItems: 'center',
                 justifyContent: 'center',
                 minHeight: 200,
-                bgcolor: alpha(colors.bleuDeFrance, 0.05),
-                border: `2px dashed ${colors.bleuDeFrance}`,
+                bgcolor: dropAreaBgColor,
+                border: `2px dashed ${dropAreaBorderColor}`,
                 cursor: 'pointer',
                 '&:hover': {
-                  bgcolor: alpha(colors.bleuDeFrance, 0.08)
+                  bgcolor: alpha(bleuColor, isDark ? 0.15 : 0.08)
                 },
                 mb: 3
               }}
@@ -295,10 +329,13 @@ DELETE /api/v1/users/{id}"
                 accept=".yml,.yaml"
                 onChange={handleFileChange}
               />
-              <Box sx={{ fontSize: 48, color: colors.bleuDeFrance, mb: 2 }}>
-                ⬆️
-              </Box>
-              <Typography variant="h6" align="center" gutterBottom>
+              <Box sx={{ fontSize: 48, color: bleuColor, mb: 2 }}>⬆️</Box>
+              <Typography
+                variant="h6"
+                align="center"
+                gutterBottom
+                sx={{ color: theme.palette.text.primary }}
+              >
                 Elige archivos YML o arrástralos aquí
               </Typography>
               <Typography variant="body2" align="center" color="textSecondary">
@@ -321,7 +358,7 @@ DELETE /api/v1/users/{id}"
                       width: 24,
                       height: 24,
                       borderRadius: '50%',
-                      bgcolor: colors.liberty,
+                      bgcolor: libertyColor,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -332,7 +369,10 @@ DELETE /api/v1/users/{id}"
                   >
                     ✓
                   </Box>
-                  <Typography variant="body2">
+                  <Typography
+                    variant="body2"
+                    sx={{ color: theme.palette.text.primary }}
+                  >
                     Arrastra y suelta archivos
                   </Typography>
                 </Stack>
@@ -343,7 +383,7 @@ DELETE /api/v1/users/{id}"
                       width: 24,
                       height: 24,
                       borderRadius: '50%',
-                      bgcolor: colors.liberty,
+                      bgcolor: libertyColor,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -354,7 +394,10 @@ DELETE /api/v1/users/{id}"
                   >
                     ✓
                   </Box>
-                  <Typography variant="body2">
+                  <Typography
+                    variant="body2"
+                    sx={{ color: theme.palette.text.primary }}
+                  >
                     Compatible con todos los dispositivos
                   </Typography>
                 </Stack>
@@ -365,7 +408,7 @@ DELETE /api/v1/users/{id}"
                       width: 24,
                       height: 24,
                       borderRadius: '50%',
-                      bgcolor: colors.liberty,
+                      bgcolor: libertyColor,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -376,18 +419,32 @@ DELETE /api/v1/users/{id}"
                   >
                     ✓
                   </Box>
-                  <Typography variant="body2">100% seguro y privado</Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: theme.palette.text.primary }}
+                  >
+                    100% seguro y privado
+                  </Typography>
                 </Stack>
               </Box>
             </Box>
 
             {/* Files List */}
             {files.length > 0 && (
-              <Paper sx={{ p: 2, mb: 3 }}>
+              <Paper
+                sx={{
+                  p: 2,
+                  mb: 3,
+                  bgcolor: theme.palette.background.paper // Adaptado al tema
+                }}
+              >
                 <Typography
                   variant="subtitle1"
                   fontWeight="medium"
-                  sx={{ mb: 1 }}
+                  sx={{
+                    mb: 1,
+                    color: theme.palette.text.primary
+                  }}
                 >
                   Archivos subidos
                 </Typography>
@@ -403,6 +460,7 @@ DELETE /api/v1/users/{id}"
                             edge="end"
                             onClick={() => removeFile(index)}
                             size="small"
+                            sx={{ color: theme.palette.text.secondary }}
                           >
                             <Box sx={{ fontSize: 'default' }}>🗑️</Box>
                           </IconButton>
@@ -410,7 +468,13 @@ DELETE /api/v1/users/{id}"
                       }
                     >
                       <ListItemText
-                        primary={file.name}
+                        primary={
+                          <Typography
+                            sx={{ color: theme.palette.text.primary }}
+                          >
+                            {file.name}
+                          </Typography>
+                        }
                         secondary={`${(file.size / 1024).toFixed(2)} KB`}
                       />
                     </ListItem>
@@ -430,9 +494,9 @@ DELETE /api/v1/users/{id}"
                   sx={{
                     px: 4,
                     py: 1.5,
-                    bgcolor: colors.bleuDeFrance,
+                    bgcolor: bleuColor,
                     '&:hover': {
-                      bgcolor: alpha(colors.liberty, 0.8)
+                      bgcolor: alpha(libertyColor, 0.8)
                     }
                   }}
                 >
@@ -467,7 +531,11 @@ DELETE /api/v1/users/{id}"
             {/* Routes Display with Tabs */}
             {(routes.length > 0 || routesFail.length > 0) && (
               <Paper
-                sx={{ p: 3, bgcolor: alpha(colors.littleBoyBlue, 0.2), mb: 4 }}
+                sx={{
+                  p: 3,
+                  bgcolor: resultsAreaBgColor,
+                  mb: 4
+                }}
               >
                 <Box
                   sx={{
@@ -477,7 +545,11 @@ DELETE /api/v1/users/{id}"
                     mb: 1
                   }}
                 >
-                  <Typography variant="subtitle1" fontWeight="medium">
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="medium"
+                    sx={{ color: theme.palette.text.primary }}
+                  >
                     Resultados
                   </Typography>
                   <Tooltip title="Descargar rutas">
@@ -485,6 +557,9 @@ DELETE /api/v1/users/{id}"
                       onClick={downloadRoutes}
                       color="primary"
                       disabled={routes.length === 0}
+                      sx={{
+                        color: routes.length === 0 ? undefined : bleuColor
+                      }}
                     >
                       <Box sx={{ fontSize: 'default' }}>⬇️</Box>
                     </IconButton>
@@ -502,20 +577,26 @@ DELETE /api/v1/users/{id}"
                         textTransform: 'none',
                         minWidth: 'auto',
                         fontWeight: 'medium',
-                        mr: 2
+                        mr: 2,
+                        color: theme.palette.text.secondary
                       }
                     }}
+                    textColor="primary"
+                    indicatorColor="primary"
                   >
                     <Tab
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Typography variant="body2">
+                          <Typography
+                            variant="body2"
+                            sx={{ color: theme.palette.text.primary }}
+                          >
                             Rutas generadas
                           </Typography>
                           {routes.length > 0 && (
                             <Box
                               sx={{
-                                bgcolor: colors.bleuDeFrance,
+                                bgcolor: bleuColor,
                                 color: 'white',
                                 width: 20,
                                 height: 20,
@@ -541,7 +622,9 @@ DELETE /api/v1/users/{id}"
                           <Typography
                             variant="body2"
                             color={
-                              routesFail.length > 0 ? 'error.main' : 'inherit'
+                              routesFail.length > 0
+                                ? 'error.main'
+                                : theme.palette.text.primary
                             }
                           >
                             Rutas fallidas
@@ -577,7 +660,7 @@ DELETE /api/v1/users/{id}"
                   {routes.length > 0 ? (
                     <Box
                       sx={{
-                        bgcolor: 'background.paper',
+                        bgcolor: theme.palette.background.paper,
                         p: 2,
                         borderRadius: 1,
                         fontFamily: 'monospace',
@@ -600,7 +683,7 @@ DELETE /api/v1/users/{id}"
                                   ? 'warning.main'
                                   : route.startsWith('DELETE')
                                     ? 'error.main'
-                                    : 'text.primary'
+                                    : theme.palette.text.primary
                           }}
                         >
                           {route}
@@ -613,7 +696,7 @@ DELETE /api/v1/users/{id}"
                       sx={{
                         textAlign: 'center',
                         py: 4,
-                        color: 'text.secondary'
+                        color: theme.palette.text.secondary
                       }}
                     >
                       No hay rutas generadas
@@ -625,7 +708,7 @@ DELETE /api/v1/users/{id}"
                   {routesFail.length > 0 ? (
                     <Box
                       sx={{
-                        bgcolor: 'background.paper',
+                        bgcolor: theme.palette.background.paper,
                         p: 2,
                         borderRadius: 1,
                         fontFamily: 'monospace',
@@ -653,7 +736,7 @@ DELETE /api/v1/users/{id}"
                       sx={{
                         textAlign: 'center',
                         py: 4,
-                        color: 'text.secondary'
+                        color: theme.palette.text.secondary
                       }}
                     >
                       No hay rutas fallidas

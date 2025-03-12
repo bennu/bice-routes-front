@@ -1,10 +1,8 @@
 'use client'
 
-import { Box, ThemeProvider } from '@mui/material'
+import { Box } from '@mui/material'
+import { ThemeProvider } from '@/app/theme/theme-context'
 import { useCallback } from 'react'
-
-// Tema
-import theme from './theme/theme'
 
 // Componentes de layout
 import Header from '@/app/components/layout/header'
@@ -28,7 +26,7 @@ export default function BiceRoutes() {
   }, [])
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
       <Box
         sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}
       >

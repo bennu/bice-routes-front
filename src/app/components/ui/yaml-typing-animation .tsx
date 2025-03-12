@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Box, Typography, alpha } from '@mui/material'
+import { Box, Typography, alpha, useTheme } from '@mui/material'
 import { colors } from '@/app/theme/theme'
 
 const YamlTypingAnimation = () => {
@@ -9,6 +9,8 @@ const YamlTypingAnimation = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const theme = useTheme()
+  const isDark = theme.palette.mode === 'dark'
 
   // Ejemplo de contenido YAML para animar
   const yamlContent = `openapi: 3.0.0
@@ -80,6 +82,28 @@ paths:
   // Determinar si mostrar el cursor
   const showCursor = !isComplete
 
+  // Colores adaptados al tema
+  const keyColor = isDark ? theme.palette.primary.light : colors.bleuDeFrance
+  const valueColor = isDark ? '#8cb4ff' : colors.liberty
+  const dashColor = isDark ? '#bb9af7' : colors.thistle
+  const textColor = isDark ? theme.palette.text.primary : '#333'
+  const commentColor = isDark ? '#6a9955' : '#6A9955'
+  const bgColorEditor = isDark ? alpha('#121212', 0.7) : alpha('#ffffff', 0.15)
+  const borderColor = isDark ? alpha('#333333', 0.3) : alpha('#ffffff', 0.15)
+  const gradientBgDots = isDark
+    ? `
+      radial-gradient(${alpha(theme.palette.primary.main, 0.2)} 1px, transparent 1px), 
+      radial-gradient(${alpha(theme.palette.primary.dark, 0.15)} 1px, transparent 1px)
+    `
+    : `
+      radial-gradient(${alpha(colors.bleuDeFrance, 0.2)} 1px, transparent 1px), 
+      radial-gradient(${alpha(colors.liberty, 0.15)} 1px, transparent 1px)
+    `
+
+  const headerGradient = isDark
+    ? `linear-gradient(to right, ${colors.darkLiberty || '#6D73C6'}, ${colors.darkBleuDeFrance || '#4B98F5'})`
+    : `linear-gradient(to right, ${colors.liberty}, ${colors.bleuDeFrance})`
+
   return (
     <Box
       sx={{
@@ -91,12 +115,10 @@ paths:
         alignItems: 'center',
         padding: 0,
         // Fondo con un sutil patrón de puntos para el efecto de profundidad
-        backgroundImage: `
-          radial-gradient(${alpha(colors.bleuDeFrance, 0.2)} 1px, transparent 1px), 
-          radial-gradient(${alpha(colors.liberty, 0.15)} 1px, transparent 1px)
-        `,
+        backgroundImage: gradientBgDots,
         backgroundSize: '20px 20px',
-        backgroundPosition: '0 0, 10px 10px'
+        backgroundPosition: '0 0, 10px 10px',
+        backgroundColor: isDark ? alpha('#121212', 0.4) : 'transparent'
       }}
     >
       {/* Contenedor principal con efecto glassmorphism */}
@@ -108,14 +130,14 @@ paths:
           overflow: 'hidden',
           position: 'relative',
           // Efectos de glassmorphism
-          backgroundColor: alpha('#ffffff', 0.15),
+          backgroundColor: bgColorEditor,
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)', // Para Safari
           boxShadow: `
-            0 8px 32px 0 ${alpha(colors.liberty, 0.15)},
-            inset 0 0 0 1px ${alpha('#ffffff', 0.08)}
+            0 8px 32px 0 ${alpha(isDark ? '#000000' : colors.liberty, 0.15)},
+            inset 0 0 0 1px ${alpha(isDark ? '#333333' : '#ffffff', 0.08)}
           `,
-          border: `1px solid ${alpha('#ffffff', 0.15)}`,
+          border: `1px solid ${borderColor}`,
           // Reflejo en la parte superior
           '&::before': {
             content: '""',
@@ -124,7 +146,7 @@ paths:
             left: 0,
             right: 0,
             height: '20%',
-            background: `linear-gradient(to bottom, ${alpha('#ffffff', 0.15)}, transparent)`,
+            background: `linear-gradient(to bottom, ${alpha(isDark ? '#333333' : '#ffffff', 0.15)}, transparent)`,
             zIndex: 1,
             pointerEvents: 'none'
           }
@@ -134,11 +156,11 @@ paths:
         <Box
           sx={{
             height: 36,
-            background: `linear-gradient(to right, ${colors.liberty}, ${colors.bleuDeFrance})`,
+            background: headerGradient,
             display: 'flex',
             alignItems: 'center',
             px: 3,
-            borderBottom: `1px solid ${alpha(colors.liberty, 0.2)}`
+            borderBottom: `1px solid ${alpha(isDark ? theme.palette.primary.dark : colors.liberty, 0.2)}`
           }}
         >
           <Typography
@@ -192,7 +214,8 @@ paths:
             fontSize: '0.85rem',
             fontWeight: 500,
             lineHeight: 1.7,
-            color: '#111',
+            color: textColor,
+            backgroundColor: isDark ? alpha('#121212', 0.4) : 'transparent',
             whiteSpace: 'pre',
             position: 'relative',
             '&::-webkit-scrollbar': {
@@ -202,7 +225,10 @@ paths:
               background: 'transparent'
             },
             '&::-webkit-scrollbar-thumb': {
-              background: alpha(colors.liberty, 0.3),
+              background: alpha(
+                isDark ? theme.palette.primary.main : colors.liberty,
+                0.3
+              ),
               borderRadius: '4px'
             }
           }}
@@ -210,7 +236,15 @@ paths:
           {/* Contenido YAML con colores de sintaxis */}
           {text.split('\n').map((line, index) => (
             <Box key={index} sx={{ display: 'flex', flexWrap: 'wrap' }}>
-              {colorizeYaml(line)}
+              {colorizeYaml(
+                line,
+                isDark,
+                keyColor,
+                valueColor,
+                dashColor,
+                textColor,
+                commentColor
+              )}
             </Box>
           ))}
 
@@ -222,7 +256,9 @@ paths:
                 display: 'inline-block',
                 width: '0.6em',
                 height: '1.2em',
-                backgroundColor: colors.bleuDeFrance,
+                backgroundColor: isDark
+                  ? theme.palette.primary.main
+                  : colors.bleuDeFrance,
                 animation: 'blink 1s step-end infinite',
                 '@keyframes blink': {
                   '0%, 100%': { opacity: 1 },
@@ -243,7 +279,9 @@ paths:
           width: 50,
           height: 50,
           borderRadius: '50%',
-          background: `linear-gradient(145deg, ${alpha(colors.bleuDeFrance, 0.8)}, ${alpha(colors.liberty, 0.8)})`,
+          background: isDark
+            ? `linear-gradient(145deg, ${alpha(theme.palette.primary.light, 0.8)}, ${alpha(theme.palette.primary.main, 0.8)})`
+            : `linear-gradient(145deg, ${alpha(colors.bleuDeFrance, 0.8)}, ${alpha(colors.liberty, 0.8)})`,
           filter: 'blur(20px)',
           opacity: 0.6,
           zIndex: -1
@@ -258,7 +296,9 @@ paths:
           width: 70,
           height: 70,
           borderRadius: '50%',
-          background: `linear-gradient(145deg, ${alpha(colors.thistle, 0.8)}, ${alpha(colors.platinum, 0.8)})`,
+          background: isDark
+            ? `linear-gradient(145deg, ${alpha(theme.palette.primary.dark, 0.8)}, ${alpha(theme.palette.background.paper, 0.8)})`
+            : `linear-gradient(145deg, ${alpha(colors.thistle, 0.8)}, ${alpha(colors.platinum, 0.8)})`,
           filter: 'blur(25px)',
           opacity: 0.5,
           zIndex: -1
@@ -268,12 +308,23 @@ paths:
   )
 }
 
-// Función para dar color a la sintaxis YAML
-const colorizeYaml = (line: string) => {
+// Función para dar color a la sintaxis YAML con parámetros para diferentes temas
+const colorizeYaml = (
+  line: string,
+  isDark: boolean,
+  keyColor: string,
+  valueColor: string,
+  dashColor: string,
+  textColor: string,
+  commentColor: string
+) => {
   // Detectar líneas de comentarios
   if (line.trim().startsWith('#')) {
     return (
-      <Typography component="span" sx={{ color: '#6A9955', whiteSpace: 'pre' }}>
+      <Typography
+        component="span"
+        sx={{ color: commentColor, whiteSpace: 'pre' }}
+      >
         {line}
       </Typography>
     )
@@ -290,20 +341,23 @@ const colorizeYaml = (line: string) => {
         <Typography
           component="span"
           sx={{
-            color: colors.bleuDeFrance,
+            color: keyColor,
             whiteSpace: 'pre',
             fontWeight: 'bold'
           }}
         >
           {key}
         </Typography>
-        <Typography component="span" sx={{ color: '#333', whiteSpace: 'pre' }}>
+        <Typography
+          component="span"
+          sx={{ color: textColor, whiteSpace: 'pre' }}
+        >
           :
         </Typography>
         {value && (
           <Typography
             component="span"
-            sx={{ color: colors.liberty, whiteSpace: 'pre' }}
+            sx={{ color: valueColor, whiteSpace: 'pre' }}
           >
             {value}
           </Typography>
@@ -319,18 +373,21 @@ const colorizeYaml = (line: string) => {
 
     return (
       <>
-        <Typography component="span" sx={{ whiteSpace: 'pre' }}>
+        <Typography
+          component="span"
+          sx={{ whiteSpace: 'pre', color: textColor }}
+        >
           {indent}
         </Typography>
         <Typography
           component="span"
-          sx={{ color: colors.thistle, whiteSpace: 'pre', fontWeight: 'bold' }}
+          sx={{ color: dashColor, whiteSpace: 'pre', fontWeight: 'bold' }}
         >
           -
         </Typography>
         <Typography
           component="span"
-          sx={{ color: colors.liberty, whiteSpace: 'pre' }}
+          sx={{ color: valueColor, whiteSpace: 'pre' }}
         >
           {rest}
         </Typography>
@@ -340,7 +397,7 @@ const colorizeYaml = (line: string) => {
 
   // Línea normal
   return (
-    <Typography component="span" sx={{ whiteSpace: 'pre', color: '#333' }}>
+    <Typography component="span" sx={{ whiteSpace: 'pre', color: textColor }}>
       {line}
     </Typography>
   )

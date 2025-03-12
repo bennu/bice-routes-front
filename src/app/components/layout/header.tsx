@@ -1,5 +1,3 @@
-// Encabezado de la aplicación con navegación y logo
-
 import { useState, useEffect } from 'react'
 import {
   Box,
@@ -12,6 +10,7 @@ import {
 import Logo from './logo'
 import { colors } from '../../theme/theme'
 import theme from '../../theme/theme'
+import ThemeToggleButton from '../ui/theme-toggle-button' // Importamos el nuevo componente
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -37,7 +36,7 @@ const Header = () => {
       color="default"
       elevation={isScrolled ? 4 : 0}
       sx={{
-        bgcolor: 'white',
+        bgcolor: 'background.paper',
         borderBottom: isScrolled ? 'none' : `1px solid ${theme.palette.divider}`
       }}
     >
@@ -106,6 +105,11 @@ const Header = () => {
             </Link>
           </Box>
 
+          {/* Theme Toggle Button */}
+          <Box sx={{ ml: 2, display: 'flex', alignItems: 'center' }}>
+            <ThemeToggleButton />
+          </Box>
+
           {/* Mobile Navigation Links */}
           <Box
             sx={{
@@ -135,6 +139,10 @@ const Header = () => {
             >
               FAQ
             </Link>
+            {/* Mobile Theme Toggle */}
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <ThemeToggleButton />
+            </Box>
           </Box>
         </Toolbar>
       </Container>

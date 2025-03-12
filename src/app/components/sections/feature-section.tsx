@@ -1,10 +1,10 @@
-// Sección de características principales
-
-import { Box, Container, Typography } from '@mui/material'
+import { Box, Container, Typography, useTheme } from '@mui/material'
 import FeatureCard from '../ui/feature-card'
 import { colors } from '../../theme/theme'
 
 const FeaturesSection = () => {
+  const theme = useTheme()
+
   const features = [
     {
       icon: '⚡',
@@ -34,7 +34,10 @@ const FeaturesSection = () => {
       id="features"
       sx={{
         py: { xs: 8, md: 12 },
-        bgcolor: 'white'
+        bgcolor:
+          theme.palette.mode === 'dark'
+            ? theme.palette.background.default
+            : 'white'
       }}
     >
       <Container maxWidth="lg">
@@ -43,7 +46,10 @@ const FeaturesSection = () => {
           component="h2"
           align="center"
           gutterBottom
-          sx={{ mb: 6 }}
+          sx={{
+            mb: 6,
+            color: theme.palette.text.primary // Adapta el color al tema
+          }}
         >
           Características principales
         </Typography>
