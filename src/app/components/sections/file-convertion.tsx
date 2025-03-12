@@ -23,8 +23,8 @@ import {
 } from '@mui/material'
 import { colors } from '../../theme/theme'
 import { parse } from '@/app/service/routesService'
-import DownloadIcon from '@mui/icons-material/Download'
 
+// Componente para los paneles de pestañas
 interface TabPanelProps {
   children?: React.ReactNode
   index: number
@@ -132,8 +132,8 @@ const FileConverterSection = () => {
 
       // Crear el objeto de datos correctamente estructurado para el backend
       const data = {
-        base64: existingRoutesBase64,
-        base64List: base64List
+        routes: existingRoutesBase64,
+        openApiSpecs: base64List
       }
 
       // Enviar los datos al servicio
@@ -486,7 +486,7 @@ DELETE /api/v1/users/{id}"
                       color="primary"
                       disabled={routes.length === 0}
                     >
-                      <DownloadIcon />
+                      <Box sx={{ fontSize: 'default' }}>⬇️</Box>
                     </IconButton>
                   </Tooltip>
                 </Box>
@@ -544,7 +544,7 @@ DELETE /api/v1/users/{id}"
                               routesFail.length > 0 ? 'error.main' : 'inherit'
                             }
                           >
-                            Rutas repetidas
+                            Rutas fallidas
                           </Typography>
                           {routesFail.length > 0 && (
                             <Box
