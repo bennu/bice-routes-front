@@ -1,0 +1,35 @@
+name: Deploy static site in AWS CDN
+on:
+  workflow_dispatch:
+jobs:
+  deploy_cdn:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags')
+    env:
+      S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+      ID_DISTRIBUTION:  ${{ secrets.ID_DISTRIBUTION }}
+      PATH_BUILD: ${{ secrets.PATH_BUILD  || 'out' }}  
+      NODE_VERSION: ${{ secrets.NODE_VERSION || '20.18.0' }} 
+      STAGE: ${{ secrets.STAGE || 'prod' }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: build static page
+      run: |
+        npm install
+        npm run build
+    - name: Set up AWS CLI
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION || 'us-east-1'}} 
+    - name: Upload to S3
+      run: |
+        aws configure set preview.cloudfront true
+        find ${{ env.PATH_BUILD }}  -type f -empty -delete
+        aws s3 sync --delete  ${{ env.PATH_BUILD }} s3://$S3_BUCKET_NAME/
+        aws cloudfront create-invalidation --distribution-id $ID_DISTRIBUTION --path '/*'
