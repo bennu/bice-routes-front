@@ -1,4 +1,4 @@
-name: Deploy statics site in AWS CDN
+name: Deploy static site in AWS CDN
 on:
   workflow_dispatch:
 jobs:
