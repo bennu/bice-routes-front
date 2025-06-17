@@ -1,5 +1,8 @@
 name: Deploy static site in AWS CDN
 on:
+  push:
+    branches:
+      - feat/deploy-frontend
   workflow_dispatch:
 jobs:
   deploy_cdn:
