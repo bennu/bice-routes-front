@@ -42,7 +42,7 @@ const getStage = (): StageType => {
 }
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  output: 'export',
   env: envs[getStage()],
   typescript: {
     ignoreBuildErrors: true
