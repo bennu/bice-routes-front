@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BICE Routes
 
-## Getting Started
+A modern Next.js routing application with React 19 and Material UI.
 
-First, run the development server:
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://shields.io/)
+[![Next.js](https://img.shields.io/badge/Next.js-15.1.6-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.0.0-61DAFB?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Material UI](https://img.shields.io/badge/MUI-6.4.5-0081CB?logo=mui)](https://mui.com/)
+[![Cypress](https://img.shields.io/badge/Cypress-14.1.0-17202C?logo=cypress)](https://www.cypress.io/)
+[![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?logo=prettier)](https://prettier.io/)
+[![Commitlint](https://img.shields.io/badge/commitlint-enabled-brightgreen?logo=commitlint)](https://commitlint.js.org/)
+[![Husky](https://img.shields.io/badge/husky-enabled-yellow?logo=git)](https://typicode.github.io/husky/)
+[![License](https://img.shields.io/github/license/bennu/commons?label=License&logo=opensourceinitiative)](https://opensource.org/license/mit-0)
+
+## 📋 Features
+
+- **Next.js 15** with Turbopack for rapid development
+- **React 19** for modern UI development
+- **TypeScript** for type safety
+- **Material UI 6** component library
+- **Axios** for API requests
+- **React Hook Form** for form handling
+- **Cypress** testing framework
+- **ESLint & Prettier** for code quality
+- **Husky & lint-staged** for pre-commit hooks
+- **Commitlint** for conventional commit messages
+
+## 🚀 Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/yourusername/bice-routes.git
+cd bice-routes
+
+# Install dependencies
+npm install
+
+# Start development server with Turbopack
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 💻 Available Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `npm run dev` - Start development server with Turbopack
+- `npm run build` - Build the application for production
+- `npm run start` - Start the production server
+- `npm run lint` - Run ESLint to check for issues
+- `npm run format` - Format code with Prettier
+- `npm run cypress:open` - Open Cypress test runner
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧪 Testing
 
-## Learn More
+This project uses Cypress for end-to-end testing:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Open Cypress test runner
+npm run cypress:open
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔧 Code Quality Tools
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project is set up with several code quality tools:
 
-## Deploy on Vercel
+- **ESLint & Prettier**: For code linting and formatting
+- **Husky**: For Git hooks
+- **lint-staged**: To run linters on staged files
+- **commitlint**: To enforce conventional commit messages
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Pre-commit hooks will automatically:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Lint and fix JavaScript/TypeScript files
+- Format all code with Prettier
+
+## 📝 License
+
+This code is licensed under the [MIT License](https://opensource.org/license/mit).
